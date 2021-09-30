@@ -6,11 +6,13 @@ export const todosSlice = createSlice({
     items: [
       {
         id: "1",
-        title: "Learn React"
+        title: "Learn React",
+        completed: true,
       },
       {
         id: "2",
-        title: "Read Book"
+        title: "Read Book",
+        completed: false,
       }
     ],
   },
