@@ -1,6 +1,6 @@
 import React from "react";
 import { useAppSelector, useAppDispatch } from "../../hooks/reduxHooks";
-import { toggle } from "../../redux/todos/todosSlice";
+import { toggle, destroy } from "../../redux/todos/todosSlice";
 
 const ToDoList: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -18,7 +18,10 @@ const ToDoList: React.FC = () => {
               onChange={() => dispatch(toggle({ id: item.id }))}
             />
             <label>{item.title}</label>
-            <button className="destroy"></button>
+            <button
+              className="destroy"
+              onClick={() => dispatch(destroy({ id: item.id }))}
+            ></button>
           </div>
         </li>
       ))}
