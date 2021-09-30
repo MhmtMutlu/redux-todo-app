@@ -1,4 +1,10 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction  } from "@reduxjs/toolkit";
+
+type Items = {
+  id: string;
+  title: string;
+  completed: boolean;
+}
 
 export const todosSlice = createSlice({
   name: "todos",
@@ -16,7 +22,12 @@ export const todosSlice = createSlice({
       }
     ],
   },
-  reducers: {},
+  reducers: {
+    addToDo: (state, action: PayloadAction<Items>) => {
+      state.items.push(action.payload)
+    }
+  },
 });
 
+export const { addToDo } = todosSlice.actions
 export default todosSlice.reducer;
