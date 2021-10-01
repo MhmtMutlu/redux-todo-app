@@ -1,11 +1,14 @@
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
-import { changeActiveFilter } from "../../redux/todos/todosSlice";
+import {
+  changeActiveFilter,
+  clearCompleted,
+} from "../../redux/todos/todosSlice";
 
 const ContentFooter: React.FC = () => {
   const items = useAppSelector((state) => state.todos.items);
   const activeFilter = useAppSelector((state) => state.todos.activeFilter);
-	const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
   const itemsLeft = items.filter((item) => !item.completed);
 
@@ -45,7 +48,12 @@ const ContentFooter: React.FC = () => {
           </a>
         </li>
       </ul>
-      <button className="clear-completed">Clear completed</button>
+      <button
+        className="clear-completed"
+        onClick={() => dispatch(clearCompleted())}
+      >
+        Clear completed
+      </button>
     </footer>
   );
 };
