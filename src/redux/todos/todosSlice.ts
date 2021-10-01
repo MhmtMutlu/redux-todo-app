@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Id, Items } from "../../types/types";
+import { Id, Items, StateType } from "../../types/types";
 
 export const todosSlice = createSlice({
   name: "todos",
@@ -44,11 +44,17 @@ export const todosSlice = createSlice({
   },
 });
 
-export const { 
-  addToDo, 
-  toggle, 
-  destroy, 
-  changeActiveFilter, 
-  clearCompleted 
-} = todosSlice.actions;
+export const selectTodos = (state: StateType) => state.todos.items;
+export const selectFilteredTodos = (state: StateType) => {
+  if (state.todos.activeFilter === "all") {
+    return state.todos.items;
+  }
+  return state.todos.items.filter((todo) =>
+    state.todos.activeFilter === "active"
+      ? todo.completed === false
+      : todo.completed === true
+  );
+};
+export const { addToDo, toggle, destroy, changeActiveFilter, clearCompleted } =
+  todosSlice.actions;
 export default todosSlice.reducer;

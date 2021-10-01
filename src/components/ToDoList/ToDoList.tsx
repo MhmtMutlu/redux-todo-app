@@ -1,28 +1,17 @@
 import React from "react";
-import { useAppSelector, useAppDispatch } from "../../hooks/reduxHooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { toggle, destroy } from "../../redux/todos/todosSlice";
 import { Items } from "../../types/types";
+import { selectFilteredTodos }from "../../redux/todos/todosSlice";
 
-let filtered: Array<Items> = [];
 
 const ToDoList: React.FC = () => {
   const dispatch = useAppDispatch();
-  const items = useAppSelector((state) => state.todos.items);
-  const activeFilter = useAppSelector((state) => state.todos.activeFilter);
-
-  if (activeFilter !== "all") {
-    filtered = items.filter((todo) =>
-      activeFilter === "active"
-        ? todo.completed === false
-        : todo.completed === true
-    );
-  } else {
-    filtered = items;
-  }
+  const filteredTodos = useAppSelector(selectFilteredTodos)
 
   return (
     <ul className="todo-list">
-      {filtered.map((item) => (
+      {filteredTodos.map((item) => (
         <li key={item.id} className={item.completed ? "completed" : ""}>
           <div className="view">
             <input
