@@ -7,3 +7,10 @@ export type Items = {
 export type Id = {
   id: string;
 };
+
+export type StateType = {
+  todos: {
+    items: Array<Items>;
+    activeFilter: string;
+  };
+};
