@@ -1,14 +1,9 @@
 import React from "react";
 import { useAppSelector, useAppDispatch } from "../../hooks/reduxHooks";
 import { toggle, destroy } from "../../redux/todos/todosSlice";
+import { Items } from "../../types/types";
 
-type ToDoItem = {
-  id: string;
-  title: string;
-  completed: boolean;
-};
-
-let filtered: Array<ToDoItem> = [];
+let filtered: Array<Items> = [];
 
 const ToDoList: React.FC = () => {
   const dispatch = useAppDispatch();

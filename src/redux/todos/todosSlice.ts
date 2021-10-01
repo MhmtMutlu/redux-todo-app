@@ -1,14 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-type Items = {
-  id: string;
-  title: string;
-  completed: boolean;
-};
-
-type Id = {
-  id: string;
-};
+import { Id, Items } from "../../types/types";
 
 export const todosSlice = createSlice({
   name: "todos",
