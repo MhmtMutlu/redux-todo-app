@@ -1,11 +1,14 @@
 import React from 'react';
+import { useAppSelector } from '../../hooks/reduxHooks';
 
 const ContentFooter: React.FC = () => {
+	const items = useAppSelector((state) => state.todos.items);
+	const itemsLeft = items.filter(item => !item.completed);
+
   return (
     <footer className="footer">
 		<span className="todo-count">
-			<strong>2</strong>
-			items left
+			<strong>{itemsLeft.length}</strong> item{itemsLeft.length > 1 && "s"} left
 		</span>
 
 		<ul className="filters">
