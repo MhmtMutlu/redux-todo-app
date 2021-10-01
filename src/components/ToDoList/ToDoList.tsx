@@ -1,7 +1,6 @@
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { toggle, destroy } from "../../redux/todos/todosSlice";
-import { Items } from "../../types/types";
 import { selectFilteredTodos }from "../../redux/todos/todosSlice";
 
 
