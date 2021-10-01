@@ -9,14 +9,16 @@ const Form: React.FC = () => {
 
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(addToDo(
-      {
-        id: nanoid(),
-        title,
-        completed: false,
-      }
-    ))
-    setTitle("");
+    if (title !== "" && !(/^\s+$/.test(title))) {
+      dispatch(addToDo(
+        {
+          id: nanoid(),
+          title,
+          completed: false,
+        }
+      ))
+      setTitle("");
+    }
   };
 
   return (
