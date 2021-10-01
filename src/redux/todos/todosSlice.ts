@@ -45,6 +45,7 @@ export const todosSlice = createSlice({
 });
 
 export const selectTodos = (state: StateType) => state.todos.items;
+export const selectActiveFilter = (state: StateType) => state.todos.activeFilter;
 export const selectFilteredTodos = (state: StateType) => {
   if (state.todos.activeFilter === "all") {
     return state.todos.items;

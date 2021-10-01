@@ -4,11 +4,11 @@ import {
   changeActiveFilter,
   clearCompleted,
 } from "../../redux/todos/todosSlice";
-import { selectTodos }from "../../redux/todos/todosSlice";
+import { selectTodos, selectActiveFilter }from "../../redux/todos/todosSlice";
 
 const ContentFooter: React.FC = () => {
   const items = useAppSelector(selectTodos);
-  const activeFilter = useAppSelector((state) => state.todos.activeFilter);
+  const activeFilter = useAppSelector(selectActiveFilter);
   const dispatch = useAppDispatch();
 
   const itemsLeft = items.filter((item) => !item.completed);
