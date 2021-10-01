@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useAppDispatch } from "../../hooks/reduxHooks";
 import { addToDo } from "../../redux/todos/todosSlice";
-import { nanoid } from "@reduxjs/toolkit";
 
 const Form: React.FC = () => {
   const [title, setTitle] = useState<string>("");
@@ -9,14 +8,10 @@ const Form: React.FC = () => {
 
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (title !== "" && !(/^\s+$/.test(title))) {
-      dispatch(addToDo(
-        {
-          id: nanoid(),
-          title,
-          completed: false,
-        }
-      ))
+    if (title !== "" && !/^\s+$/.test(title)) {
+      dispatch(
+        addToDo({ title })
+      );
       setTitle("");
     }
   };
