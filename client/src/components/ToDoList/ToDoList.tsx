@@ -5,12 +5,14 @@ import {
   selectFilteredTodos,
   getTodosAsync,
 } from "../../redux/todos/todosSlice";
+import Error from "../Error/Error";
 import Loading from "../Loading/Loading";
 
 const ToDoList: React.FC = () => {
   const dispatch = useAppDispatch();
   const filteredTodos = useAppSelector(selectFilteredTodos);
   const isLoading = useAppSelector((state) => state.todos.isLoading);
+  const error = useAppSelector((state) => state.todos.error);
 
   useEffect(() => {
     dispatch(getTodosAsync());
@@ -18,6 +20,10 @@ const ToDoList: React.FC = () => {
 
   if(isLoading) {
     return <Loading />
+  }
+
+  if (error) {
+    return <Error message={error} />
   }
 
   return (

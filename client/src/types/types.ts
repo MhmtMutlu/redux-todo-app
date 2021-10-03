@@ -8,6 +8,10 @@ export type Id = {
   id: string;
 };
 
+export type Message = {
+  message: string;
+}
+
 export type StateType = {
   todos: {
     items: Array<Items>;
