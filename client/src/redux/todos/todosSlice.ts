@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { Data, Id, StateType, TodosState } from "../../types/types";
+import { Data, Id, Items, StateType, TodosState } from "../../types/types";
 
 const initialState = {
   items: [],
@@ -23,6 +23,9 @@ export const addTodosAsync = createAsyncThunk(
   async (todo: Data) => {
     const res = await fetch("http://localhost:7000/todos", {
       method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(todo),
     });
     return await res.json();
@@ -70,8 +73,8 @@ export const todosSlice = createSlice({
     builder.addCase(addTodosAsync.pending, (state) => {
       state.addNewTodoLoading = true;
     });
-    builder.addCase(addTodosAsync.fulfilled, (state, action) => {
-      state.isLoading = false;
+    builder.addCase(addTodosAsync.fulfilled, (state, action: PayloadAction<Items>) => {
+      state.addNewTodoLoading = false;
       state.items.push(action.payload);
     });
     builder.addCase(addTodosAsync.rejected, (state, action) => {
