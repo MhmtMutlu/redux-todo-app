@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { useAppDispatch } from "../../hooks/reduxHooks";
-import { addToDo } from "../../redux/todos/todosSlice";
+import { addTodosAsync } from "../../redux/todos/todosSlice";
 
 const Form: React.FC = () => {
   const [title, setTitle] = useState<string>("");
   const dispatch = useAppDispatch();
 
-  const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (title !== "" && !/^\s+$/.test(title)) {
-      dispatch(
-        addToDo({ title })
+      await dispatch(
+        addTodosAsync({ title })
       );
       setTitle("");
     }

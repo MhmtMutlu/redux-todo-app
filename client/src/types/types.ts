@@ -12,6 +12,12 @@ export type Message = {
   message: string;
 }
 
+export type Data = {
+  id?: string;
+  title: string;
+  completed?: boolean;
+}
+
 export type StateType = {
   todos: {
     items: Array<Items>;
@@ -24,4 +30,6 @@ export interface TodosState {
   items: Array<Items>
   activeFilter: string
   isLoading: boolean
+  addNewTodoLoading: boolean
+  addNewTodoError: string | null | undefined
 }
