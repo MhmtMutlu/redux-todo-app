@@ -13,7 +13,7 @@ const initialState = {
 export const getTodosAsync = createAsyncThunk(
   "todos/getTodosAsync/",
   async () => {
-    const res = await fetch("http://localhost:7000/todos");
+    const res = await fetch(`${process.env.REACT_APP_API_BASE_ENDPOINT}`);
     return await res.json();
   }
 );
@@ -21,7 +21,7 @@ export const getTodosAsync = createAsyncThunk(
 export const addTodosAsync = createAsyncThunk(
   "todos/addTodosAsync/",
   async (todo: Data) => {
-    const res = await fetch("http://localhost:7000/todos", {
+    const res = await fetch(`${process.env.REACT_APP_API_BASE_ENDPOINT}`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
