@@ -1,23 +1,26 @@
-import { createSlice, PayloadAction, nanoid } from "@reduxjs/toolkit";
-import { Id, Items, StateType } from "../../types/types";
+import {
+  createSlice,
+  PayloadAction,
+  nanoid,
+  createAsyncThunk,
+} from "@reduxjs/toolkit";
+import { Id, Items, StateType, TodosState } from "../../types/types";
+
+const initialState = {
+  items: [],
+  error: null,
+  activeFilter: "all",
+  isLoading: false
+} as TodosState
+
+export const getTodosAsync = createAsyncThunk("todos/getTodosAsync/", async () => {
+  const res = await fetch("http://localhost:7000/todos");
+  return await (res.json());
+});
 
 export const todosSlice = createSlice({
   name: "todos",
-  initialState: {
-    items: [
-      {
-        id: "1",
-        title: "Learn React",
-        completed: true,
-      },
-      {
-        id: "2",
-        title: "Read Book",
-        completed: false,
-      },
-    ],
-    activeFilter: "all",
-  },
+  initialState,
   reducers: {
     addToDo: {
       reducer: (state, action: PayloadAction<Items>) => {
@@ -28,10 +31,10 @@ export const todosSlice = createSlice({
           payload: {
             id: nanoid(),
             completed: false,
-            title
-          }
-        }
-      }
+            title,
+          },
+        };
+      },
     },
     toggle: (state, action: PayloadAction<Id>) => {
       const { id } = action.payload;
@@ -53,10 +56,24 @@ export const todosSlice = createSlice({
       state.items = filtered;
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(getTodosAsync.pending, (state) => {
+      state.isLoading = true
+    })
+    builder.addCase(getTodosAsync.fulfilled, (state, action) => {
+      state.isLoading = false
+      state.items = action.payload
+    })
+    builder.addCase(getTodosAsync.rejected, (state, action) => {
+      state.isLoading = false
+      state.error = action.error.message
+    })
+  },
 });
 
 export const selectTodos = (state: StateType) => state.todos.items;
-export const selectActiveFilter = (state: StateType) => state.todos.activeFilter;
+export const selectActiveFilter = (state: StateType) =>
+  state.todos.activeFilter;
 export const selectFilteredTodos = (state: StateType) => {
   if (state.todos.activeFilter === "all") {
     return state.todos.items;

@@ -1,12 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { toggle, destroy } from "../../redux/todos/todosSlice";
-import { selectFilteredTodos }from "../../redux/todos/todosSlice";
-
+import {
+  selectFilteredTodos,
+  getTodosAsync,
+} from "../../redux/todos/todosSlice";
+import Loading from "../Loading/Loading";
 
 const ToDoList: React.FC = () => {
   const dispatch = useAppDispatch();
-  const filteredTodos = useAppSelector(selectFilteredTodos)
+  const filteredTodos = useAppSelector(selectFilteredTodos);
+  const isLoading = useAppSelector((state) => state.todos.isLoading);
+
+  useEffect(() => {
+    dispatch(getTodosAsync());
+  }, [dispatch]);
+
+  if(isLoading) {
+    return <Loading />
+  }
 
   return (
     <ul className="todo-list">

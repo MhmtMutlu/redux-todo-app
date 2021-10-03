@@ -14,3 +14,10 @@ export type StateType = {
     activeFilter: string;
   };
 };
+
+export interface TodosState {
+  error: string | null | undefined
+  items: Array<Items>
+  activeFilter: string
+  isLoading: boolean
+}
