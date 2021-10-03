@@ -7,6 +7,7 @@ const Form: React.FC = () => {
   const [title, setTitle] = useState<string>("");
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector((state) => state.todos.addNewTodoLoading);
+  const error = useAppSelector((state) => state.todos.addNewTodoError);
 
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -25,10 +26,11 @@ const Form: React.FC = () => {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
-        {
-          isLoading && <Loading />
-        }
       </form>
+      {isLoading && <Loading />}
+      {error && (
+        <h3 style={{ color: "red", padding: "10px" }}>Error: {error}</h3>
+      )}
     </>
   );
 };
