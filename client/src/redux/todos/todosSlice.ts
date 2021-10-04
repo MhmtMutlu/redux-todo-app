@@ -1,5 +1,6 @@
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { Data, Items, StateType, TodosState } from "../../types/types";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Items, StateType, TodosState } from "../../types/types";
+import {deleteTodosAsync, getTodosAsync,  addTodosAsync, toggleTodosAsync } from "./services";
 
 const initialState = {
   items: [],
@@ -9,56 +10,6 @@ const initialState = {
   addNewTodoLoading: false,
   addNewTodoError: null,
 } as TodosState;
-
-export const getTodosAsync = createAsyncThunk(
-  "todos/getTodosAsync/",
-  async () => {
-    const res = await fetch(`${process.env.REACT_APP_API_BASE_ENDPOINT}`);
-    return res.json();
-  }
-);
-
-export const addTodosAsync = createAsyncThunk(
-  "todos/addTodosAsync/",
-  async (todo: Data) => {
-    const res = await fetch(`${process.env.REACT_APP_API_BASE_ENDPOINT}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(todo),
-    });
-    return res.json();
-  }
-);
-
-export const toggleTodosAsync = createAsyncThunk(
-  "todos/toggleTodosAsync/",
-  async ({ id, completed }: Data) => {
-    const res = await fetch(
-      `${process.env.REACT_APP_API_BASE_ENDPOINT}/${id}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ completed }),
-      }
-    );
-    return res.json();
-  }
-);
-
-export const deleteTodosAsync = createAsyncThunk(
-  "todos/deleteTodosAsync/",
-  async (id: string) => {
-    await fetch(
-      `${process.env.REACT_APP_API_BASE_ENDPOINT}/${id}`,
-      { method: "DELETE" }
-    );
-    return id;
-  }
-);
 
 export const todosSlice = createSlice({
   name: "todos",

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
-import { addTodosAsync } from "../../redux/todos/todosSlice";
+import { addTodosAsync } from "../../redux/todos/services";
 import Loading from "../Loading/Loading";
 
 const Form: React.FC = () => {

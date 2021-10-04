@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+import { selectFilteredTodos } from "../../redux/todos/todosSlice";
 import {
-  selectFilteredTodos,
   getTodosAsync,
   toggleTodosAsync,
   deleteTodosAsync,
-} from "../../redux/todos/todosSlice";
+} from "../../redux/todos/services";
 import Error from "../Error/Error";
 import Loading from "../Loading/Loading";
 
