@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
-import { destroy } from "../../redux/todos/todosSlice";
 import {
   selectFilteredTodos,
   getTodosAsync,
-  toggleTodosAsync
+  toggleTodosAsync,
+  deleteTodosAsync,
 } from "../../redux/todos/todosSlice";
 import Error from "../Error/Error";
 import Loading from "../Loading/Loading";
@@ -20,15 +20,21 @@ const ToDoList: React.FC = () => {
   }, [dispatch]);
 
   const handleToggle = async (id: string, completed: boolean) => {
-    await dispatch(toggleTodosAsync({ id, completed }))
-  }
+    await dispatch(toggleTodosAsync({ id, completed }));
+  };
 
-  if(isLoading) {
-    return <Loading />
+  const handleDestroy = async (id: string) => {
+    if (window.confirm("Are you sure?")) {
+      await dispatch(deleteTodosAsync(id));
+    }
+  };
+
+  if (isLoading) {
+    return <Loading />;
   }
 
   if (error) {
-    return <Error message={error} />
+    return <Error message={error} />;
   }
 
   return (
@@ -40,12 +46,12 @@ const ToDoList: React.FC = () => {
               className="toggle"
               type="checkbox"
               checked={item.completed}
-              onChange={() => handleToggle( item.id, !item.completed )}
+              onChange={() => handleToggle(item.id, !item.completed)}
             />
             <label>{item.title}</label>
             <button
               className="destroy"
-              onClick={() => dispatch(destroy({ id: item.id }))}
+              onClick={() => handleDestroy(item.id)}
             ></button>
           </div>
         </li>

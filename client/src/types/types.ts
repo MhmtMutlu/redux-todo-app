@@ -4,10 +4,6 @@ export type Items = {
   completed: boolean;
 };
 
-export type Id = {
-  id: string;
-};
-
 export type Message = {
   message: string;
 }

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { Data, Id, Items, StateType, TodosState } from "../../types/types";
+import { Data, Items, StateType, TodosState } from "../../types/types";
 
 const initialState = {
   items: [],
@@ -7,14 +7,14 @@ const initialState = {
   activeFilter: "all",
   isLoading: false,
   addNewTodoLoading: false,
-  addNewTodoError: null
+  addNewTodoError: null,
 } as TodosState;
 
 export const getTodosAsync = createAsyncThunk(
   "todos/getTodosAsync/",
   async () => {
     const res = await fetch(`${process.env.REACT_APP_API_BASE_ENDPOINT}`);
-    return await res.json();
+    return res.json();
   }
 );
 
@@ -24,25 +24,39 @@ export const addTodosAsync = createAsyncThunk(
     const res = await fetch(`${process.env.REACT_APP_API_BASE_ENDPOINT}`, {
       method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(todo),
     });
-    return await res.json();
+    return res.json();
   }
 );
 
 export const toggleTodosAsync = createAsyncThunk(
   "todos/toggleTodosAsync/",
   async ({ id, completed }: Data) => {
-    const res = await fetch(`${process.env.REACT_APP_API_BASE_ENDPOINT}/${id}`, {
-      method: "PATCH",
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({completed}),
-    });
-    return await res.json();
+    const res = await fetch(
+      `${process.env.REACT_APP_API_BASE_ENDPOINT}/${id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ completed }),
+      }
+    );
+    return res.json();
+  }
+);
+
+export const deleteTodosAsync = createAsyncThunk(
+  "todos/deleteTodosAsync/",
+  async (id: string) => {
+    await fetch(
+      `${process.env.REACT_APP_API_BASE_ENDPOINT}/${id}`,
+      { method: "DELETE" }
+    );
+    return id;
   }
 );
 
@@ -50,12 +64,6 @@ export const todosSlice = createSlice({
   name: "todos",
   initialState,
   reducers: {
-    destroy: (state, action: PayloadAction<Id>) => {
-      const { id } = action.payload;
-      const filtered = state.items.filter((item) => item.id !== id);
-
-      state.items = filtered;
-    },
     changeActiveFilter: (state, action: PayloadAction<string>) => {
       state.activeFilter = action.payload;
     },
@@ -81,20 +89,37 @@ export const todosSlice = createSlice({
     builder.addCase(addTodosAsync.pending, (state) => {
       state.addNewTodoLoading = true;
     });
-    builder.addCase(addTodosAsync.fulfilled, (state, action: PayloadAction<Items>) => {
-      state.addNewTodoLoading = false;
-      state.items.push(action.payload);
-    });
+    builder.addCase(
+      addTodosAsync.fulfilled,
+      (state, action: PayloadAction<Items>) => {
+        state.addNewTodoLoading = false;
+        state.items.push(action.payload);
+      }
+    );
     builder.addCase(addTodosAsync.rejected, (state, action) => {
       state.addNewTodoLoading = false;
       state.addNewTodoError = action.error.message;
     });
     // toggle todos
-    builder.addCase(toggleTodosAsync.fulfilled, (state, action: PayloadAction<Items>) => {
-      const { id, completed } = action.payload;
-      const index = state.items.findIndex(item => item.id === id);
-      state.items[index].completed = completed;
-    });
+    builder.addCase(
+      toggleTodosAsync.fulfilled,
+      (state, action: PayloadAction<Items>) => {
+        const { id, completed } = action.payload;
+        const index = state.items.findIndex((item) => item.id === id);
+        state.items[index].completed = completed;
+      }
+    );
+    // delete todos
+    builder.addCase(
+      deleteTodosAsync.fulfilled,
+      (state, action: PayloadAction<string>) => {
+        const id = action.payload;
+        const filtered = state.items.filter((item) => item.id !== id);
+        state.items = filtered;
+        // const index = state.items.findIndex((item) => item.id === id);
+        // state.items.splice(index, 1);
+      }
+    );
   },
 });
 
@@ -111,6 +136,5 @@ export const selectFilteredTodos = (state: StateType) => {
       : todo.completed === true
   );
 };
-export const { destroy, changeActiveFilter, clearCompleted } =
-  todosSlice.actions;
+export const { changeActiveFilter, clearCompleted } = todosSlice.actions;
 export default todosSlice.reducer;
