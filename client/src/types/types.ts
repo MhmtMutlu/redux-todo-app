@@ -14,7 +14,7 @@ export type Message = {
 
 export type Data = {
   id?: string;
-  title: string;
+  title?: string;
   completed?: boolean;
 }
 

@@ -32,16 +32,24 @@ export const addTodosAsync = createAsyncThunk(
   }
 );
 
+export const toggleTodosAsync = createAsyncThunk(
+  "todos/toggleTodosAsync/",
+  async ({ id, completed }: Data) => {
+    const res = await fetch(`${process.env.REACT_APP_API_BASE_ENDPOINT}/${id}`, {
+      method: "PATCH",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({completed}),
+    });
+    return await res.json();
+  }
+);
+
 export const todosSlice = createSlice({
   name: "todos",
   initialState,
   reducers: {
-    toggle: (state, action: PayloadAction<Id>) => {
-      const { id } = action.payload;
-      const item = state.items.find((obj) => obj.id === id);
-
-      item && (item.completed = !item?.completed);
-    },
     destroy: (state, action: PayloadAction<Id>) => {
       const { id } = action.payload;
       const filtered = state.items.filter((item) => item.id !== id);
@@ -81,6 +89,12 @@ export const todosSlice = createSlice({
       state.addNewTodoLoading = false;
       state.addNewTodoError = action.error.message;
     });
+    // toggle todos
+    builder.addCase(toggleTodosAsync.fulfilled, (state, action: PayloadAction<Items>) => {
+      const { id, completed } = action.payload;
+      const index = state.items.findIndex(item => item.id === id);
+      state.items[index].completed = completed;
+    });
   },
 });
 
@@ -97,6 +111,6 @@ export const selectFilteredTodos = (state: StateType) => {
       : todo.completed === true
   );
 };
-export const { toggle, destroy, changeActiveFilter, clearCompleted } =
+export const { destroy, changeActiveFilter, clearCompleted } =
   todosSlice.actions;
 export default todosSlice.reducer;

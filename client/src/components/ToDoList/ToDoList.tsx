@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
-import { toggle, destroy } from "../../redux/todos/todosSlice";
+import { destroy } from "../../redux/todos/todosSlice";
 import {
   selectFilteredTodos,
   getTodosAsync,
+  toggleTodosAsync
 } from "../../redux/todos/todosSlice";
 import Error from "../Error/Error";
 import Loading from "../Loading/Loading";
@@ -17,6 +18,10 @@ const ToDoList: React.FC = () => {
   useEffect(() => {
     dispatch(getTodosAsync());
   }, [dispatch]);
+
+  const handleToggle = async (id: string, completed: boolean) => {
+    await dispatch(toggleTodosAsync({ id, completed }))
+  }
 
   if(isLoading) {
     return <Loading />
@@ -35,7 +40,7 @@ const ToDoList: React.FC = () => {
               className="toggle"
               type="checkbox"
               checked={item.completed}
-              onChange={() => dispatch(toggle({ id: item.id }))}
+              onChange={() => handleToggle( item.id, !item.completed )}
             />
             <label>{item.title}</label>
             <button
