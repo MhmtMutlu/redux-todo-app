@@ -4,7 +4,7 @@ import { Data, Items, StateType, TodosState } from "../../types/types";
 const initialState = {
   items: [],
   error: null,
-  activeFilter: "all",
+  activeFilter: localStorage.getItem("activeFilter") || "all",
   isLoading: false,
   addNewTodoLoading: false,
   addNewTodoError: null,

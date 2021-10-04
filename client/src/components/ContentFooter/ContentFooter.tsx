@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import {
   changeActiveFilter,
   clearCompleted,
 } from "../../redux/todos/todosSlice";
-import { selectTodos, selectActiveFilter }from "../../redux/todos/todosSlice";
+import { selectTodos, selectActiveFilter } from "../../redux/todos/todosSlice";
 
 const ContentFooter: React.FC = () => {
   const items = useAppSelector(selectTodos);
@@ -12,6 +12,10 @@ const ContentFooter: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const itemsLeft = items.filter((item) => !item.completed);
+
+  useEffect(() => {
+    localStorage.setItem("activeFilter", activeFilter);
+  }, [activeFilter]);
 
   return (
     <footer className="footer">
